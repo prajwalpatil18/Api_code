@@ -1,10 +1,10 @@
-# Use lightweight Python base
+# ---- Base Image ----
 FROM python:3.10-slim
 
-# Set working directory
+# ---- Set working directory ----
 WORKDIR /app
 
-# Install system dependencies (required for FAISS)
+# ---- Install system dependencies for FAISS & scientific libs ----
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libopenblas-dev \
@@ -12,14 +12,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy your project files into the container
+# ---- Copy project files ----
 COPY . .
 
-# Install dependencies
+# ---- Install Python dependencies ----
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port 8080 (Fly.io default)
-EXPOSE 8000
+# ---- Expose Fly.io default port ----
+EXPOSE 8080
 
-# Start FastAPI server
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# ---- Run FastAPI using Fly PORT environment variable ----
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
