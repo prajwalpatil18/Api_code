@@ -27,8 +27,8 @@ EXPOSE 8080
 
 # Set environment variables for your app
 # (Values will be injected later on Fly.io / Railway)
-ENV OPENAI_API_KEY=""
-ENV GROQ_API_KEY=""
+ENV API_KEY=""
+ENV HF_TOKEN=""
 
 # Fly.io requires binding to PORT=8080
 ENV PORT=8080
